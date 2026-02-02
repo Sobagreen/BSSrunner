@@ -22,12 +22,26 @@ const minigameTitle = document.getElementById('minigame-title');
 const minigameTimer = document.getElementById('minigame-timer');
 const minigameBody = document.getElementById('minigame-body');
 
+minigameModal.classList.add('hidden');
+minigameModal.hidden = true;
+
 const minigameManager = new MinigameManager({
   modal: minigameModal,
   title: minigameTitle,
   timer: minigameTimer,
   body: minigameBody,
 });
+
+let gameStarted = false;
+
+const setGameStarted = (value) => {
+  gameStarted = value;
+  if (!value) {
+    minigameManager.abortActive();
+    minigameModal.classList.add('hidden');
+    minigameModal.hidden = true;
+  }
+};
 
 const runner = new Runner({
   canvas,
@@ -54,6 +68,7 @@ function updateHud(stats) {
 }
 
 async function startMinigame() {
+  if (!gameStarted) return;
   runner.pause();
   try {
     const result = await minigameManager.startRandom();
@@ -70,6 +85,7 @@ function showGameOver(finalScore) {
   elements.startScreen.classList.add('hidden');
   elements.bestScore.textContent = Math.floor(finalScore);
   multiplayer.finish(finalScore);
+  setGameStarted(false);
 }
 
 function resetToMenu() {
@@ -80,16 +96,19 @@ function resetToMenu() {
 elements.startBtn.addEventListener('click', () => {
   elements.startScreen.classList.add('hidden');
   elements.gameOver.classList.add('hidden');
+  setGameStarted(true);
   runner.start();
 });
 
 elements.restartBtn.addEventListener('click', () => {
   elements.gameOver.classList.add('hidden');
+  setGameStarted(true);
   runner.start();
 });
 
 elements.menuBtn.addEventListener('click', () => {
   runner.stop();
+  setGameStarted(false);
   resetToMenu();
 });
 
