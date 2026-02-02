@@ -39,11 +39,15 @@ export class IceCleaningGame {
       };
 
       let holdInterval = null;
-      area.addEventListener('mousedown', () => {
+      const stopHold = () => clearInterval(holdInterval);
+
+      area.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
         holdInterval = setInterval(onScrub, 120);
       });
-      area.addEventListener('mouseup', () => clearInterval(holdInterval));
-      area.addEventListener('mouseleave', () => clearInterval(holdInterval));
+      area.addEventListener('pointerup', stopHold);
+      area.addEventListener('pointerleave', stopHold);
+      area.addEventListener('pointercancel', stopHold);
       area.addEventListener('click', onScrub);
 
       const timer = setInterval(() => {
@@ -63,7 +67,7 @@ export class IceCleaningGame {
         if (resolved) return;
         resolved = true;
         clearInterval(timer);
-        clearInterval(holdInterval);
+        stopHold();
         resolve({ success });
       };
 

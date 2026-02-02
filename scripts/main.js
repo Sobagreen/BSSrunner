@@ -53,14 +53,16 @@ function updateHud(stats) {
   multiplayer.updateSelf(stats);
 }
 
-function startMinigame() {
+async function startMinigame() {
   runner.pause();
-  minigameManager.startRandom().then((result) => {
+  try {
+    const result = await minigameManager.startRandom();
     if (!result.success) {
       runner.loseLife();
     }
+  } finally {
     runner.resume();
-  });
+  }
 }
 
 function showGameOver(finalScore) {
@@ -100,6 +102,52 @@ elements.pauseBtn.addEventListener('click', () => {
     elements.pauseBtn.textContent = 'Продолжить';
   }
 });
+
+const controlPad = document.querySelector('.control-pad');
+const actionHandlers = {
+  left: () => runner.handleInput({ code: 'ArrowLeft' }),
+  right: () => runner.handleInput({ code: 'ArrowRight' }),
+  jump: () => runner.handleInput({ code: 'Space' }),
+  duck: (isRelease) => runner.handleInput({ code: 'ArrowDown' }, isRelease),
+};
+let duckPressed = false;
+
+controlPad?.addEventListener('pointerdown', (event) => {
+  const button = event.target.closest('.control-btn');
+  if (!button || minigameManager.isActive || elements.startScreen.classList.contains('hidden') === false) {
+    return;
+  }
+  event.preventDefault();
+  const action = button.dataset.action;
+  if (action === 'duck') {
+    actionHandlers.duck(false);
+    duckPressed = true;
+  } else {
+    actionHandlers[action]?.();
+  }
+});
+
+const handleControlRelease = (event) => {
+  const button = event.target.closest?.('.control-btn');
+  if (!button) {
+    if (duckPressed) {
+      actionHandlers.duck(true);
+      duckPressed = false;
+    }
+    return;
+  }
+  event.preventDefault();
+  if (button.dataset.action === 'duck') {
+    actionHandlers.duck(true);
+    duckPressed = false;
+  }
+};
+
+controlPad?.addEventListener('pointerup', handleControlRelease);
+controlPad?.addEventListener('pointerleave', handleControlRelease);
+controlPad?.addEventListener('pointercancel', handleControlRelease);
+window.addEventListener('pointerup', handleControlRelease);
+window.addEventListener('pointercancel', handleControlRelease);
 
 window.addEventListener('keydown', (event) => {
   if (minigameManager.isActive && event.code === 'Escape') {
