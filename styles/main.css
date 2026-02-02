@@ -191,7 +191,7 @@ canvas {
 }
 
 .hidden {
-  display: none;
+  display: none; !important;
 }
 
 .modal {
@@ -559,7 +559,7 @@ input[type="range"] {
   }
 
   .control-pad {
-    display: flex;
+    : flex;
   }
 
   .modal-content {
