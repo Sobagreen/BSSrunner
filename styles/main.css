@@ -81,6 +81,28 @@ body {
   color: var(--muted);
 }
 
+.tips {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.pill {
+  background: #1a2b4a;
+  border: 1px solid #2c4270;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--accent-soft);
+}
+
 .btn {
   background: var(--accent);
   border: none;
@@ -174,6 +196,20 @@ canvas {
   border-top: 1px solid #1f2b44;
   color: var(--muted);
   font-size: 14px;
+}
+
+.footer h4 {
+  margin: 0 0 8px;
+  color: var(--text);
+}
+
+.footer ul {
+  padding-left: 18px;
+  margin: 0 0 8px;
+}
+
+.muted {
+  color: var(--muted);
 }
 
 .status {
@@ -382,6 +418,61 @@ input[type="range"] {
 .maze-cell.player {
   background: #2c4a7d;
   border-color: #5a88c8;
+}
+
+.node-grid,
+.alarm-grid,
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.node-button,
+.alarm-button {
+  background: #0f1c33;
+  border: 1px solid #2a3d63;
+  color: var(--text);
+  padding: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 600;
+}
+
+.node-button.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 140, 42, 0.3);
+}
+
+.alarm-button.flash {
+  background: #ffb36a;
+  color: #1b1208;
+}
+
+.sensor-card {
+  background: #0f1c33;
+  border: 1px solid #2a3d63;
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #14233d;
+  border: 1px solid #22355a;
+  cursor: pointer;
+}
+
+.toggle.active {
+  border-color: var(--success);
+  color: var(--success);
 }
 
 @media (max-width: 960px) {

@@ -18,8 +18,9 @@ export class TechConnectionGame {
     this.duration = 20;
   }
 
-  start({ body, timerEl }) {
+  start({ body, timerEl, signal }) {
     return new Promise((resolve) => {
+      let resolved = false;
       const ports = Object.keys(MAPPING);
       const count = 2 + Math.floor(Math.random() * 4);
       const selectedPorts = ports.sort(() => 0.5 - Math.random()).slice(0, count);
@@ -96,9 +97,13 @@ export class TechConnectionGame {
       timerEl.textContent = String(remaining);
 
       const cleanup = (success) => {
+        if (resolved) return;
+        resolved = true;
         clearInterval(timer);
         resolve({ success });
       };
+
+      signal?.addEventListener('abort', () => cleanup(false), { once: true });
     });
   }
 }

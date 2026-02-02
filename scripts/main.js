@@ -102,6 +102,10 @@ elements.pauseBtn.addEventListener('click', () => {
 });
 
 window.addEventListener('keydown', (event) => {
+  if (minigameManager.isActive && event.code === 'Escape') {
+    minigameManager.abortActive();
+    return;
+  }
   if (elements.startScreen.classList.contains('hidden') && !minigameManager.isActive) {
     runner.handleInput(event);
   }

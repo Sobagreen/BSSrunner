@@ -4,8 +4,9 @@ export class SignalTuneGame {
     this.duration = 18;
   }
 
-  start({ body, timerEl }) {
+  start({ body, timerEl, signal }) {
     return new Promise((resolve) => {
+      let resolved = false;
       let remaining = this.duration;
       let stableTime = 0;
 
@@ -65,10 +66,14 @@ export class SignalTuneGame {
       timerEl.textContent = String(remaining);
 
       const cleanup = (success) => {
+        if (resolved) return;
+        resolved = true;
         clearInterval(interval);
         clearInterval(timer);
         resolve({ success });
       };
+
+      signal?.addEventListener('abort', () => cleanup(false), { once: true });
     });
   }
 }

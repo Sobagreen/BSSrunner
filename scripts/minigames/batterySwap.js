@@ -4,8 +4,9 @@ export class BatterySwapGame {
     this.duration = 15;
   }
 
-  start({ body, timerEl }) {
+  start({ body, timerEl, signal }) {
     return new Promise((resolve) => {
+      let resolved = false;
       let remaining = this.duration;
       let stage = 0;
       let errors = 0;
@@ -99,12 +100,16 @@ export class BatterySwapGame {
       timerEl.textContent = String(remaining);
 
       const cleanup = (success) => {
+        if (resolved) return;
+        resolved = true;
         clearInterval(timer);
         battery.removeEventListener('mousedown', onMouseDown);
         window.removeEventListener('mouseup', onMouseUp);
         grid.removeEventListener('mousemove', onMouseMove);
         resolve({ success });
       };
+
+      signal?.addEventListener('abort', () => cleanup(false), { once: true });
     });
   }
 }

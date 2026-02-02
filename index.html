@@ -21,14 +21,19 @@
   <main class="layout">
     <section class="left-panel">
       <div id="start-screen" class="card">
-        <h2>Добро пожаловать</h2>
-        <p>Инженер БС выезжает на срочный вызов. Пробегите как можно дальше и выполните задачи точно и быстро.</p>
-        <ul>
+        <h2>Готовы к выезду?</h2>
+        <p>Пробегите как можно дальше и выполняйте инженерные задачи без ошибок. Мини-игры запускаются каждые 150–250 м.</p>
+        <div class="pill-row">
+          <span class="pill">3 жизни</span>
+          <span class="pill">Скорость растёт</span>
+          <span class="pill">Точность важна</span>
+        </div>
+        <ul class="tips">
           <li><strong>Пробел / ↑</strong> — прыжок</li>
           <li><strong>↓</strong> — присесть</li>
-          <li><strong>← / →</strong> — уклонение по полосам</li>
+          <li><strong>← / →</strong> — смена полосы</li>
         </ul>
-        <button id="start-btn" class="btn">Старт</button>
+        <button id="start-btn" class="btn">Начать смену</button>
       </div>
 
       <div id="game-over" class="card hidden">
@@ -53,6 +58,16 @@
           <div>Соперник: <span id="mp-remote">—</span></div>
         </div>
       </div>
+
+      <div class="card">
+        <h3>Цели смены</h3>
+        <ul class="tips">
+          <li>Избегайте препятствий: ямы, кабели, лужи.</li>
+          <li>В мини-играх следуйте инструкциям и таймеру.</li>
+          <li>В мультиплеере победит тот, кто дольше сохранит жизни.</li>
+        </ul>
+        <p class="notice">Если окно мини-игры зависло, нажмите <strong>Esc</strong> — оно будет закрыто автоматически.</p>
+      </div>
     </section>
 
     <section class="game-panel">
@@ -65,7 +80,7 @@
     </section>
   </main>
 
-  <section id="minigame-modal" class="modal hidden" role="dialog" aria-live="polite">
+  <section id="minigame-modal" class="modal hidden" hidden role="dialog" aria-live="polite">
     <div class="modal-content">
       <header>
         <h2 id="minigame-title">Мини-игра</h2>
@@ -76,8 +91,15 @@
   </section>
 
   <footer class="footer">
-    <p>Визуальные ассеты (касие, персонаж, БС, препятствия) подключаются из папки <code>assets/</code>. Добавьте их при необходимости.</p>
-    <p>Например: <code>assets/character-run.png</code>, <code>assets/antenna-ice.png</code>, <code>assets/battery.png</code>.</p>
+    <h4>Список нужных изображений</h4>
+    <ul>
+      <li>Персонаж: бег, прыжок, присед, падение (спрайты).</li>
+      <li>Фоны раннера: дорога, поля, силуэты БС, погодные эффекты.</li>
+      <li>Препятствия: яма, кабель, лужа, снежная метель.</li>
+      <li>Мини-игры: разъёмы/порты, наледь на антенне, АКБ, измерители сигнала, оптоволокно, датчики дверей, кнопки тревоги.</li>
+      <li>Иконки UI: жизни, таймер, скорость, пауза.</li>
+    </ul>
+    <p class="muted">Все ассеты добавляйте в папку <code>assets/</code> (например, <code>assets/character-run.png</code>).</p>
   </footer>
 
   <script type="module" src="scripts/main.js"></script>

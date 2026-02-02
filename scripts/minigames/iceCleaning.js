@@ -4,8 +4,9 @@ export class IceCleaningGame {
     this.duration = 12;
   }
 
-  start({ body, timerEl }) {
+  start({ body, timerEl, signal }) {
     return new Promise((resolve) => {
+      let resolved = false;
       let remaining = this.duration;
       let ice = 100;
 
@@ -59,10 +60,14 @@ export class IceCleaningGame {
       updateUI();
 
       const cleanup = (success) => {
+        if (resolved) return;
+        resolved = true;
         clearInterval(timer);
         clearInterval(holdInterval);
         resolve({ success });
       };
+
+      signal?.addEventListener('abort', () => cleanup(false), { once: true });
     });
   }
 }

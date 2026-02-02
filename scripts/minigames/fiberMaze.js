@@ -4,8 +4,9 @@ export class FiberMazeGame {
     this.duration = 18;
   }
 
-  start({ body, timerEl }) {
+  start({ body, timerEl, signal }) {
     return new Promise((resolve) => {
+      let resolved = false;
       let remaining = this.duration;
       const maze = document.createElement('div');
       maze.className = 'maze';
@@ -85,10 +86,14 @@ export class FiberMazeGame {
       timerEl.textContent = String(remaining);
 
       const cleanup = (success) => {
+        if (resolved) return;
+        resolved = true;
         clearInterval(timer);
         window.removeEventListener('keydown', onKey);
         resolve({ success });
       };
+
+      signal?.addEventListener('abort', () => cleanup(false), { once: true });
     });
   }
 }
