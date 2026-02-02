@@ -6,7 +6,7 @@
   <title>Инженер БС: Срочный выезд</title>
   <link rel="stylesheet" href="styles/main.css" />
 </head>
-<body>
+<body data-game-started="false">
   <input id="server-url" name="server" type="hidden" value="wss://mazepark-1.onrender.com" spellcheck="false" />
   <header class="top-bar">
     <h1>Инженер БС: Срочный выезд</h1>
@@ -73,6 +73,13 @@
     <section class="game-panel">
       <div class="game-wrapper">
         <canvas id="runner-canvas" width="900" height="420" aria-label="Игровое поле"></canvas>
+        <div id="start-overlay" class="start-overlay">
+          <div class="start-overlay-card">
+            <h2>Стартовое меню</h2>
+            <p>Нажмите кнопку, чтобы начать смену и запустить раннер.</p>
+            <button id="start-btn-overlay" class="btn">Начать смену</button>
+          </div>
+        </div>
         <div class="lane-indicator">
           Полоса: <span id="lane">2</span>
         </div>

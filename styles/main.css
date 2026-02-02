@@ -191,7 +191,37 @@ canvas {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+body[data-game-started='false'] #minigame-modal {
+  display: none !important;
+}
+
+.start-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 10, 20, 0.75);
+  border-radius: 18px;
+  z-index: 15;
+  text-align: center;
+  padding: 24px;
+}
+
+.start-overlay-card {
+  background: rgba(18, 28, 48, 0.9);
+  border: 1px solid #1f2b44;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 360px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+}
+
+.start-overlay-card h2 {
+  margin-top: 0;
 }
 
 .modal {

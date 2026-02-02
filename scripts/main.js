@@ -9,6 +9,8 @@ const elements = {
   lane: document.getElementById('lane'),
   startScreen: document.getElementById('start-screen'),
   startBtn: document.getElementById('start-btn'),
+  startOverlay: document.getElementById('start-overlay'),
+  startBtnOverlay: document.getElementById('start-btn-overlay'),
   gameOver: document.getElementById('game-over'),
   bestScore: document.getElementById('best-score'),
   restartBtn: document.getElementById('restart-btn'),
@@ -36,6 +38,7 @@ let gameStarted = false;
 
 const setGameStarted = (value) => {
   gameStarted = value;
+  document.body.dataset.gameStarted = value ? 'true' : 'false';
   if (!value) {
     minigameManager.abortActive();
     minigameModal.classList.add('hidden');
@@ -86,19 +89,25 @@ function showGameOver(finalScore) {
   elements.bestScore.textContent = Math.floor(finalScore);
   multiplayer.finish(finalScore);
   setGameStarted(false);
+  updateStartOverlay();
 }
 
 function resetToMenu() {
   elements.gameOver.classList.add('hidden');
   elements.startScreen.classList.remove('hidden');
+  updateStartOverlay();
 }
 
-elements.startBtn.addEventListener('click', () => {
+const startGame = () => {
   elements.startScreen.classList.add('hidden');
   elements.gameOver.classList.add('hidden');
   setGameStarted(true);
   runner.start();
-});
+  updateStartOverlay();
+};
+
+elements.startBtn.addEventListener('click', startGame);
+elements.startBtnOverlay.addEventListener('click', startGame);
 
 elements.restartBtn.addEventListener('click', () => {
   elements.gameOver.classList.add('hidden');
@@ -184,4 +193,11 @@ window.addEventListener('keyup', (event) => {
   }
 });
 
+function updateStartOverlay() {
+  if (!elements.startOverlay) return;
+  const showOverlay = !elements.startScreen.classList.contains('hidden');
+  elements.startOverlay.classList.toggle('hidden', !showOverlay);
+}
+
+updateStartOverlay();
 runner.drawIdle();
