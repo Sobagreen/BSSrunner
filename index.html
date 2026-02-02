@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Инженер БС: Срочный выезд</title>
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <input id="server-url" name="server" type="hidden" value="wss://mazepark-1.onrender.com" spellcheck="false" />
+  <header class="top-bar">
+    <h1>Инженер БС: Срочный выезд</h1>
+    <div class="hud">
+      <div class="hud-item">Дистанция: <span id="distance">0</span> м</div>
+      <div class="hud-item">Скорость: <span id="speed">0</span> м/с</div>
+      <div class="hud-item">Жизни: <span id="lives">3</span></div>
+      <button id="pause-btn" class="btn ghost">Пауза</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="left-panel">
+      <div id="start-screen" class="card">
+        <h2>Добро пожаловать</h2>
+        <p>Инженер БС выезжает на срочный вызов. Пробегите как можно дальше и выполните задачи точно и быстро.</p>
+        <ul>
+          <li><strong>Пробел / ↑</strong> — прыжок</li>
+          <li><strong>↓</strong> — присесть</li>
+          <li><strong>← / →</strong> — уклонение по полосам</li>
+        </ul>
+        <button id="start-btn" class="btn">Старт</button>
+      </div>
+
+      <div id="game-over" class="card hidden">
+        <h2>Миссия провалена</h2>
+        <p>Рекорд: <span id="best-score">0</span> м</p>
+        <div class="actions">
+          <button id="restart-btn" class="btn">Заново</button>
+          <button id="menu-btn" class="btn ghost">Меню</button>
+        </div>
+      </div>
+
+      <div id="multiplayer" class="card">
+        <h3>Мультиплеер</h3>
+        <label>
+          Позывной
+          <input id="player-name" type="text" placeholder="Инженер" />
+        </label>
+        <button id="connect-btn" class="btn ghost">Подключиться</button>
+        <p class="status" id="mp-status">Не подключено</p>
+        <div class="mp-stats">
+          <div>Вы: <span id="mp-self">0 м, 3 ❤</span></div>
+          <div>Соперник: <span id="mp-remote">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="game-panel">
+      <div class="game-wrapper">
+        <canvas id="runner-canvas" width="900" height="420" aria-label="Игровое поле"></canvas>
+        <div class="lane-indicator">
+          Полоса: <span id="lane">2</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section id="minigame-modal" class="modal hidden" role="dialog" aria-live="polite">
+    <div class="modal-content">
+      <header>
+        <h2 id="minigame-title">Мини-игра</h2>
+        <div class="timer">⏱️ <span id="minigame-timer">00</span> сек</div>
+      </header>
+      <div id="minigame-body" class="minigame-body"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Визуальные ассеты (касие, персонаж, БС, препятствия) подключаются из папки <code>assets/</code>. Добавьте их при необходимости.</p>
+    <p>Например: <code>assets/character-run.png</code>, <code>assets/antenna-ice.png</code>, <code>assets/battery.png</code>.</p>
+  </footer>
+
+  <script type="module" src="scripts/main.js"></script>
+</body>
+</html>
