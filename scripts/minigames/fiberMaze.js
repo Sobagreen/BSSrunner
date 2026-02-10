@@ -45,20 +45,13 @@ export class FiberMazeGame {
       };
 
       updatePlayer();
-      body.append(
-        createNotice('Двигайтесь стрелками, избегайте красных зон и доберитесь до цели за 18 секунд.'),
-        maze,
+      const notice = createNotice(
+        'Двигайтесь стрелками, избегайте красных зон и доберитесь до цели за 18 секунд.',
       );
+      const controls = createControls();
+      body.append(notice, maze, controls);
 
-      const onKey = (event) => {
-        const moves = {
-          ArrowUp: [0, -1],
-          ArrowDown: [0, 1],
-          ArrowLeft: [-1, 0],
-          ArrowRight: [1, 0],
-        };
-        if (!moves[event.key]) return;
-        const [dx, dy] = moves[event.key];
+      const move = (dx, dy) => {
         const next = { x: position.x + dx, y: position.y + dy };
         if (next.x < 0 || next.y < 0 || next.x >= layout[0].length || next.y >= layout.length) return;
         if (layout[next.y][next.x] === '#') {
@@ -72,6 +65,28 @@ export class FiberMazeGame {
           cleanup(true);
         }
       };
+
+      const onKey = (event) => {
+        const moves = {
+          ArrowUp: [0, -1],
+          ArrowDown: [0, 1],
+          ArrowLeft: [-1, 0],
+          ArrowRight: [1, 0],
+        };
+        if (!moves[event.key]) return;
+        const [dx, dy] = moves[event.key];
+        move(dx, dy);
+      };
+
+      const onControlPointer = (event) => {
+        const button = event.target.closest('button[data-dir]');
+        if (!button) return;
+        event.preventDefault();
+        const [dx, dy] = button.dataset.dir.split(',').map(Number);
+        move(dx, dy);
+      };
+
+      controls.addEventListener('pointerdown', onControlPointer);
 
       window.addEventListener('keydown', onKey);
 
@@ -90,6 +105,7 @@ export class FiberMazeGame {
         resolved = true;
         clearInterval(timer);
         window.removeEventListener('keydown', onKey);
+        controls.removeEventListener('pointerdown', onControlPointer);
         resolve({ success });
       };
 
@@ -103,4 +119,18 @@ function createNotice(text) {
   div.className = 'notice';
   div.textContent = text;
   return div;
+}
+
+function createControls() {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'maze-controls';
+  wrapper.innerHTML = `
+    <button data-dir="0,-1" aria-label="Вверх">↑</button>
+    <div class="maze-controls__row">
+      <button data-dir="-1,0" aria-label="Влево">←</button>
+      <button data-dir="1,0" aria-label="Вправо">→</button>
+    </div>
+    <button data-dir="0,1" aria-label="Вниз">↓</button>
+  `;
+  return wrapper;
 }

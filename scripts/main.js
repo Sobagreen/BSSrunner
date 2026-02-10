@@ -22,12 +22,26 @@ const minigameTitle = document.getElementById('minigame-title');
 const minigameTimer = document.getElementById('minigame-timer');
 const minigameBody = document.getElementById('minigame-body');
 
+minigameModal.classList.add('hidden');
+minigameModal.hidden = true;
+
 const minigameManager = new MinigameManager({
   modal: minigameModal,
   title: minigameTitle,
   timer: minigameTimer,
   body: minigameBody,
 });
+
+let gameStarted = false;
+
+const setGameStarted = (value) => {
+  gameStarted = value;
+  if (!value) {
+    minigameManager.abortActive();
+    minigameModal.classList.add('hidden');
+    minigameModal.hidden = true;
+  }
+};
 
 const runner = new Runner({
   canvas,
@@ -53,14 +67,17 @@ function updateHud(stats) {
   multiplayer.updateSelf(stats);
 }
 
-function startMinigame() {
+async function startMinigame() {
+  if (!gameStarted) return;
   runner.pause();
-  minigameManager.startRandom().then((result) => {
+  try {
+    const result = await minigameManager.startRandom();
     if (!result.success) {
       runner.loseLife();
     }
+  } finally {
     runner.resume();
-  });
+  }
 }
 
 function showGameOver(finalScore) {
@@ -68,6 +85,7 @@ function showGameOver(finalScore) {
   elements.startScreen.classList.add('hidden');
   elements.bestScore.textContent = Math.floor(finalScore);
   multiplayer.finish(finalScore);
+  setGameStarted(false);
 }
 
 function resetToMenu() {
@@ -78,16 +96,19 @@ function resetToMenu() {
 elements.startBtn.addEventListener('click', () => {
   elements.startScreen.classList.add('hidden');
   elements.gameOver.classList.add('hidden');
+  setGameStarted(true);
   runner.start();
 });
 
 elements.restartBtn.addEventListener('click', () => {
   elements.gameOver.classList.add('hidden');
+  setGameStarted(true);
   runner.start();
 });
 
 elements.menuBtn.addEventListener('click', () => {
   runner.stop();
+  setGameStarted(false);
   resetToMenu();
 });
 
@@ -100,6 +121,52 @@ elements.pauseBtn.addEventListener('click', () => {
     elements.pauseBtn.textContent = 'Продолжить';
   }
 });
+
+const controlPad = document.querySelector('.control-pad');
+const actionHandlers = {
+  left: () => runner.handleInput({ code: 'ArrowLeft' }),
+  right: () => runner.handleInput({ code: 'ArrowRight' }),
+  jump: () => runner.handleInput({ code: 'Space' }),
+  duck: (isRelease) => runner.handleInput({ code: 'ArrowDown' }, isRelease),
+};
+let duckPressed = false;
+
+controlPad?.addEventListener('pointerdown', (event) => {
+  const button = event.target.closest('.control-btn');
+  if (!button || minigameManager.isActive || elements.startScreen.classList.contains('hidden') === false) {
+    return;
+  }
+  event.preventDefault();
+  const action = button.dataset.action;
+  if (action === 'duck') {
+    actionHandlers.duck(false);
+    duckPressed = true;
+  } else {
+    actionHandlers[action]?.();
+  }
+});
+
+const handleControlRelease = (event) => {
+  const button = event.target.closest?.('.control-btn');
+  if (!button) {
+    if (duckPressed) {
+      actionHandlers.duck(true);
+      duckPressed = false;
+    }
+    return;
+  }
+  event.preventDefault();
+  if (button.dataset.action === 'duck') {
+    actionHandlers.duck(true);
+    duckPressed = false;
+  }
+};
+
+controlPad?.addEventListener('pointerup', handleControlRelease);
+controlPad?.addEventListener('pointerleave', handleControlRelease);
+controlPad?.addEventListener('pointercancel', handleControlRelease);
+window.addEventListener('pointerup', handleControlRelease);
+window.addEventListener('pointercancel', handleControlRelease);
 
 window.addEventListener('keydown', (event) => {
   if (minigameManager.isActive && event.code === 'Escape') {

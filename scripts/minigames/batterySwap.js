@@ -48,15 +48,16 @@ export class BatterySwapGame {
       let currentIndex = 0;
       let dragging = false;
 
-      const onMouseDown = () => {
+      const onPointerDown = (event) => {
+        event.preventDefault();
         dragging = true;
       };
 
-      const onMouseUp = () => {
+      const onPointerUp = () => {
         dragging = false;
       };
 
-      const onMouseMove = (event) => {
+      const onPointerMove = (event) => {
         if (!dragging) return;
         const target = event.target.closest('.battery-cell');
         if (!target) return;
@@ -85,9 +86,10 @@ export class BatterySwapGame {
         }
       };
 
-      battery.addEventListener('mousedown', onMouseDown);
-      window.addEventListener('mouseup', onMouseUp);
-      grid.addEventListener('mousemove', onMouseMove);
+      battery.addEventListener('pointerdown', onPointerDown);
+      window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerUp);
+      grid.addEventListener('pointermove', onPointerMove);
 
       const timer = setInterval(() => {
         remaining -= 1;
@@ -103,9 +105,10 @@ export class BatterySwapGame {
         if (resolved) return;
         resolved = true;
         clearInterval(timer);
-        battery.removeEventListener('mousedown', onMouseDown);
-        window.removeEventListener('mouseup', onMouseUp);
-        grid.removeEventListener('mousemove', onMouseMove);
+        battery.removeEventListener('pointerdown', onPointerDown);
+        window.removeEventListener('pointerup', onPointerUp);
+        window.removeEventListener('pointercancel', onPointerUp);
+        grid.removeEventListener('pointermove', onPointerMove);
         resolve({ success });
       };
 

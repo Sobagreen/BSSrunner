@@ -39,6 +39,10 @@ export class MinigameManager {
     this.modal.hidden = false;
     this.title.textContent = game.title;
     this.body.innerHTML = '';
+    const loading = document.createElement('div');
+    loading.className = 'notice';
+    loading.textContent = 'Подготовка мини-игры...';
+    this.body.append(loading);
 
     const controller = new AbortController();
     this.controller = controller;

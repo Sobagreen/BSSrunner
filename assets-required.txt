@@ -1,0 +1,74 @@
+Список изображений для игры «Инженер БС: Срочный выезд»
+(указать путь в /assets, место внедрения и назначение)
+
+РАННЕР / ОСНОВНОЙ ЭКРАН
+1) assets/character-run.png
+   - Назначение: спрайт бега инженера.
+   - Куда вставить: scripts/runner.js → drawPlayer (отрисовка персонажа).
+2) assets/character-jump.png
+   - Назначение: спрайт прыжка.
+   - Куда вставить: scripts/runner.js → drawPlayer (состояние isJumping).
+3) assets/character-duck.png
+   - Назначение: спрайт приседа.
+   - Куда вставить: scripts/runner.js → drawPlayer (состояние isDucking).
+4) assets/character-fall.png
+   - Назначение: спрайт падения/ошибки.
+   - Куда вставить: scripts/runner.js → drawPlayer (при потере жизни).
+5) assets/bg-road.png
+   - Назначение: фон дороги/маршрута.
+   - Куда вставить: scripts/runner.js → drawBackground.
+6) assets/bg-fields.png
+   - Назначение: фон полей/пейзажа на дальнем плане.
+   - Куда вставить: scripts/runner.js → drawBackground.
+7) assets/bg-bss-silhouette.png
+   - Назначение: силуэты базовых станций вдали.
+   - Куда вставить: scripts/runner.js → drawBackground.
+8) assets/obstacle-pit.png
+   - Назначение: яма (препятствие на прыжок).
+   - Куда вставить: scripts/runner.js → drawObstacle (тип jump).
+9) assets/obstacle-cable.png
+   - Назначение: низкий кабель (препятствие на присед).
+   - Куда вставить: scripts/runner.js → drawObstacle (тип duck).
+10) assets/obstacle-puddle.png
+    - Назначение: лужа (препятствие на смену полосы).
+    - Куда вставить: scripts/runner.js → drawObstacle (тип lane).
+
+UI
+11) assets/ui-life.png
+    - Назначение: иконка жизни/аккумулятора.
+    - Куда вставить: index.html (HUD «Жизни») или styles/main.css (фон/иконка).
+12) assets/ui-speed.png
+    - Назначение: иконка скорости.
+    - Куда вставить: index.html (HUD «Скорость») или styles/main.css.
+13) assets/ui-pause.png
+    - Назначение: иконка паузы.
+    - Куда вставить: index.html (кнопка «Пауза») или styles/main.css.
+14) assets/ui-timer.png
+    - Назначение: иконка таймера мини-игр.
+    - Куда вставить: index.html (таймер в модальном окне) или styles/main.css.
+
+МИНИ-ИГРЫ
+15) assets/minigame-ports.png
+    - Назначение: фон/панель портов для «Подключение технологий».
+    - Куда вставить: scripts/minigames/techConnection.js (фон контейнера) или styles/main.css (.port-list/.tech-list).
+16) assets/minigame-ice.png
+    - Назначение: наледь на антенне.
+    - Куда вставить: scripts/minigames/iceCleaning.js (фон .ice-area).
+17) assets/minigame-battery.png
+    - Назначение: иконка АКБ.
+    - Куда вставить: scripts/minigames/batterySwap.js (элемент .battery) или styles/main.css.
+18) assets/minigame-signal.png
+    - Назначение: шкала/фон измерителя сигнала.
+    - Куда вставить: scripts/minigames/signalTune.js (фон .signal-meter).
+19) assets/minigame-fiber.png
+    - Назначение: фон мини-лабиринта ВОЛС.
+    - Куда вставить: scripts/minigames/fiberMaze.js (фон .maze).
+20) assets/minigame-grounding.png
+    - Назначение: панель контактов для «Проверка заземления».
+    - Куда вставить: scripts/minigames/groundingCheck.js (фон .node-grid).
+21) assets/minigame-alarm.png
+    - Назначение: панель индикаторов аварии.
+    - Куда вставить: scripts/minigames/alarmReset.js (фон .alarm-grid).
+22) assets/minigame-door.png
+    - Назначение: карточки датчиков двери.
+    - Куда вставить: scripts/minigames/doorSensorCalib.js (фон .sensor-grid).
